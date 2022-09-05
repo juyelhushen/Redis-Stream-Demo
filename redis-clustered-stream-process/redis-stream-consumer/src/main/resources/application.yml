@@ -1,0 +1,11 @@
+server:
+  port: 8081
+spring:
+  redis:
+    cluster:
+      nodes: 192.168.68.107:6379, 192.168.68.107:6380, 192.168.68.107:6381
+      max-redirects: 2
+
+
+stream:
+  key: email-events
