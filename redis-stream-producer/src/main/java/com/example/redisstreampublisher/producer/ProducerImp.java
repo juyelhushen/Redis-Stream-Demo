@@ -3,6 +3,8 @@ package com.example.redisstreampublisher.producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,9 +21,14 @@ public class ProducerImp {
     private Producer producer;
 
     @RequestMapping(value = "/publisher",method = RequestMethod.POST)
-    public void publish(@RequestBody String message){
-        log.info("publishing >>",message);
-        producer.publishEvent(message.toString());
-    }
+    public ResponseEntity<Void> publish(@RequestBody String message) {
 
+        try {
+            log.info("publishing >>" + message);
+            producer.publishEvent(message.toString());
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
 }

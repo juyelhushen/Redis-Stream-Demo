@@ -30,10 +30,29 @@ public class RedisConfiguration {
     @Autowired
     private RedisClusterProperties properties;
 
-    @Bean
-    public JedisConnectionFactory jedisConnectionFactory(){
-        return new JedisConnectionFactory(new RedisClusterConfiguration(properties.getNodes()));
-    }
+    /*Cluster configuration with jedis*/
+
+//    @Bean
+//    public JedisConnectionFactory jedisConnectionFactory(){
+//        return new JedisConnectionFactory(new RedisClusterConfiguration(properties.getNodes()));
+//    }
+
+    /*Cluster configuration with Lettuce*/
+
+   /* @Bean
+    public LettuceConnectionFactory lettuceConnectionFactory(){
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+        configuration.setHostName("192.168.68.107");
+        configuration.setPort(6379);
+        return new LettuceConnectionFactory(configuration);
+    }*/
+
+     @Bean
+     public LettuceConnectionFactory lettuceConnectionFactory(){
+         final LettuceConnectionFactory factory = new LettuceConnectionFactory(
+                 new RedisClusterConfiguration(properties.getNodes()));
+         return factory;
+     }
 
 
     @Autowired
@@ -48,7 +67,7 @@ public class RedisConfiguration {
                 .targetType(String.class)
                 .build();
         var listenerContainer = StreamMessageListenerContainer
-                .create(jedisConnectionFactory(), options);
+                .create(lettuceConnectionFactory(), options);
         var subscription = listenerContainer.receiveAutoAck(
                 Consumer.from(streamKey, InetAddress.getLocalHost().getHostName()),
                 StreamOffset.create(streamKey, ReadOffset.lastConsumed()),

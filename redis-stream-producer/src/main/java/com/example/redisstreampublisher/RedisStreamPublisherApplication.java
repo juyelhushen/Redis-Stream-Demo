@@ -9,5 +9,4 @@ public class RedisStreamPublisherApplication {
     public static void main(String[] args) {
         SpringApplication.run(RedisStreamPublisherApplication.class, args);
     }
-
 }

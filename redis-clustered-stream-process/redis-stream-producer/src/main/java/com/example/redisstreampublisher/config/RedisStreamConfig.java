@@ -37,20 +37,41 @@ public class RedisStreamConfig {
 //    @Value("${port.redis}")
 //    private int redisPort;
 
+   /* cluster Configuration with jedis for synchroneous process*/
+
+//    @Bean
+//    public JedisConnectionFactory jedisConnectionFactory() {
+////        RedisStandaloneConfiguration factory = new RedisStandaloneConfiguration();
+////        factory.setHostName(redisHost);
+////        factory.setPort(redisPort);
+////        return new JedisConnectionFactory(factory);
+//        return new JedisConnectionFactory(new RedisClusterConfiguration(properties.getNodes()));
+//    }
+
+
+    /*Cluster configuration with Lettuce*/
+
+   /* @Bean
+    public LettuceConnectionFactory lettuceConnectionFactory(){
+        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+        configuration.setHostName("192.168.68.107");
+        configuration.setPort(6379);
+        return new LettuceConnectionFactory(configuration);
+    }*/
 
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
-//        RedisStandaloneConfiguration factory = new RedisStandaloneConfiguration();
-//        factory.setHostName(redisHost);
-//        factory.setPort(redisPort);
-//        return new JedisConnectionFactory(factory);
-        return new JedisConnectionFactory(new RedisClusterConfiguration(properties.getNodes()));
+    public LettuceConnectionFactory lettuceConnectionFactory(){
+        final LettuceConnectionFactory factory = new LettuceConnectionFactory(
+                new RedisClusterConfiguration(properties.getNodes()));
+        return factory;
     }
+
+
 
     @Bean
     public RedisTemplate<String,Object> redisTemplate(){
         RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
