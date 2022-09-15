@@ -49,7 +49,7 @@ public class RedisStreamConfig {
 //    }
 
 
-    /*Cluster configuration with Lettuce*/
+    /*Standalone configuration with Lettuce*/
 
    /* @Bean
     public LettuceConnectionFactory lettuceConnectionFactory(){
@@ -59,6 +59,7 @@ public class RedisStreamConfig {
         return new LettuceConnectionFactory(configuration);
     }*/
 
+    /*Cluster configuration with Lettuce*/
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory(){
         final LettuceConnectionFactory factory = new LettuceConnectionFactory(

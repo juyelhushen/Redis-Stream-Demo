@@ -8,6 +8,17 @@ spring:
       max-redirects: 2
 
 
+#For master slave Configuration
+redis:
+  master:
+    host: 192.168.68.107
+    port: 6379
+  slaves:
+    - host: 192.168.68.107
+      port: 16379
+    - host: 192.168.68.107
+      port: 26379
+
 
 #host:
 #  redis: localhost
